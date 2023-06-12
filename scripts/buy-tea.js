@@ -5,21 +5,68 @@
 // Runtime Environment's members available in the global scope.
 const hre = require("hardhat");
 
+// Returns the Ethereum balance of a given address.
+async function getBalance(address) {
+  const balanceBigInt = await hre.waffle.provider.getBalance(address);
+  return hre.ethers.utils.formatEther(balanceBigInt);
+}
+
+// Logs the Ether balances for a list of addresses.
+async function printBalances(addresses) {
+  let idx = 0;
+  for (const address of addresses) {
+    console.log(`Address ${idx} balance: `, await getBalance(address));
+    idx++
+  }
+}
+
+//Logs the memos stored on-chain from tea purchases.
+async function printMemos(memos) {
+  for (const memo of memos) {
+    const timestamp = memo.timestamp;
+    const tipper = memo.name;
+    const tipperAddress = memo.from;
+    const message = memo.message;
+    console.log(`At ${timestamp}, ${tipper} (${tipperAddress}) said: "${message}"`);
+  }
+}
+
 async function main() {
-  // Hardhat always runs the compile task when running scripts with its command
-  // line interface.
-  //
-  // If this script is run directly using `node` you may want to call compile
-  // manually to make sure everything is compiled
-  // await hre.run('compile');
+  // Get example accounts.
+  const [owner, tipper, tipper2, tipper3] = await hre.ethers.getSigners();
 
-  // We get the contract to deploy
-  const Greeter = await hre.ethers.getContractFactory("Greeter");
-  const greeter = await Greeter.deploy("Hello, Hardhat!");
+  // Get the contract to deploy & deploy.
+  const BuyMeATea = await hre.ethers.getContractFactory("BuyMeATea");
+  const buyMeATea = await BuyMeATea.deploy();
+  await buyMeATea.deployed();
+  console.log("BuyMeATea deployed to", buyMeATea.address);
 
-  await greeter.deployed();
+  // Check balances before the tea purchase.
+  const addresses = [owner.address, tipper.address, buyMeATea.address];
+  console.log("== start ==");
+  await printBalances(addresses);
 
-  console.log("Greeter deployed to:", greeter.address);
+  // Buy the owner a few teas.
+  const tip = {value: hre.ethers.utils.parseEther("1.0")};
+  await buyMeATea.connect(tipper).buyTea("Carolina", "Thanks for building this!", tip);
+  await buyMeATea.connect(tipper2).buyTea("Vitto", "Amazing builder!", tip);
+  await buyMeATea.connect(tipper3).buyTea("Katy", "Awesome", tip);
+
+  // Check balances after tes purchase.
+  console.log("== bought tea ==");
+  await printBalances(addresses);
+
+  // Withdraw funds.
+  await buyMeATea.connect(owner).withDrawTips();
+
+  // Check balances after withdraw.
+  console.log("== withD rawTips ==");
+  await printBalances(addresses);
+
+  // Read all the memos left for the owner.
+  console.log("== memos ==");
+  const memos = await buyMeATea.getMemos();
+  printMemos(memos);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
