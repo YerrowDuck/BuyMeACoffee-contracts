@@ -1,7 +1,7 @@
-//SPDX-License-Identifier: Unlicense
+//SPDX-License-Identifier: MIT License.
 pragma solidity ^0.8.0;
 
-//Deoployed to Goerli at 0x03CC76d822F798B19A13e72f24f26bb645f0B5d2
+//Deoployed to Goerli at 0xC2F13528B91582E64e18Ea3E0DCDfeFedBd9333F
 
 contract BuyMeATea {
     // Event to tmit when a Memo is created
