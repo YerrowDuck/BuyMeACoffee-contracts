@@ -175,7 +175,7 @@ export default function Home() {
         </Box>
 
         {currentAccount ? (
-          <VStack spacing={4}>
+          <VStack spacing={4} pt={5}>
             <Input
               placeholder="Name"
               value={name}
