@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Inter } from 'next/font/google';
 import React, { useEffect, useState } from "react";
 import styles from '@/styles/Home.module.css';
+import { Divider } from '@chakra-ui/react';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -52,7 +53,7 @@ export default function Home() {
     try {
       const {ethereum} = window;
 
-      if(!ethreum) {
+      if(!ethereum) {
         console.log("Please install MetaMask");
       }
 
@@ -77,7 +78,7 @@ export default function Home() {
         const buyMeATea = new ethers.Contract(contractsAddress, contractABI, signer);
 
         console.log("buying tea...");
-        const teaTxn = await buyMeATea.buyMeATea(
+        const teaTxn = await buyMeATea.buyTea(
             name ? name : "Anonymous",
             message ? message : "Enjoy your tea!",
             {value: ethers.utils.parseEther("0.001")}
@@ -164,90 +165,83 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-      <h1 className={styles.title}>
-        Buy Me a Tea!
-      </h1>
+        <h1 className={styles.title}>
+          Buy Me a Tea!
+        </h1>
 
-      <p className={styles.description}>
-        「Buy Me a Tea!」へようこそ！このサービスでは、あなたはお茶代と一緒に心のこもったメッセージを送ることができます。感謝の気持ちや応援の気持ちを伝えるのに最適です。シンプルな方法であなたの気持ちを共有しましょう。
-      </p>
+        <p className={styles.description}>
+          「Buy Me a Tea!」へようこそ！このサービスでは、あなたはお茶代と一緒に心のこもったメッセージを送ることができます。感謝の気持ちや応援の気持ちを伝えるのに最適です。シンプルな方法であなたの気持ちを共有しましょう。
+        </p>
 
-      <div className={styles.formContainer}>
-        <h2 className={styles.subtitle}>
-          お茶を送る
-        </h2>
+        {currentAccount ? (
+          <div>
+            <from>
+              <div>
+                <label htmlFor="name">
+                  Name
+                </label>
+                <br/>
+                <input
+                  id = "name"
+                  type='text'
+                  placeholder="anonymous"
+                  onChange={onNameChange}
+                />
+              </div>
+              <div>
+                <label>
+                  Send Me a Message
+                </label>
+                <br/>
 
-        <div className={styles.formGroup}>
-          <label htmlFor="name" className={styles.label}>
-            あなたのお名前：
-          </label>
-          <input
-            type="text"
-            id="name"
-            className={styles.input}
-            value={name}
-            onChange={onNameChange}
-          />
-        </div>
-
-        <div className={styles.formGroup}>
-          <label htmlFor="message" className={styles.label}>
-            メッセージ：
-          </label>
-          <textarea
-            id="message"
-            className={styles.textarea}
-            value={message}
-            onChange={onMessageChange}
-          ></textarea>
-        </div>
-
-        <button className={styles.button} onClick={buyTea}>
-          お茶を贈る！
-        </button>
-      </div>
-
-      {currentAccount ? (
-        <div className={styles.walletInfo}>
-          <p className={styles.walletAddress}>
-            接続されたウォレットアドレス：{currentAccount}
-          </p>
-        </div>
-      ) : (
-        <button className={styles.connectButton} onClick={connectWallet}>
-          ウォレットに接続する
-        </button>
-      )}
-
-      <div className={styles.memoList}>
-        <h2 className={styles.subtitle}>
-          メモ一覧
-        </h2>
-
-        {memos.length > 0 ? (
-          <ul className={styles.memoItems}>
-            {memos.map((memo, index) => (
-              <li key={index} className={styles.memoItem}>
-                <p className={styles.memoFrom}>
-                  送信元：{memo.name}（{memo.address}）
-                </p>
-                <p className={styles.memoMessage}>
-                  メッセージ：{memo.message}
-                </p>
-                <p className={styles.memoTimestamp}>
-                  タイムスタンプ：{memo.timestamp.toString()}
-                </p>
-              </li>
-            ))}
-          </ul>
+                <textarea
+                  rows={3}
+                  placeholder="Enjoy your tea!"
+                  onChange={onMessageChange}
+                  required
+                >
+                </textarea>
+              </div>
+              <div>
+                <button
+                  type="button"
+                  onClick={buyTea}
+                >
+                  Send 1 Tea for 0.001 ETH
+                </button>
+              </div>
+            </from>
+          </div>
         ) : (
-          <p className={styles.noMemos}>
-            メモはありません。
-          </p>
+          <button
+            onClick={connectWallet}
+          >
+            Connect your wallet
+          </button>
         )}
-      </div>
     </main>
 
+    {currentAccount && (<h1>Memos received</h1>)}
+
+    {currentAccount && (memos.map((memo, idx) => {
+      return (
+        <div key={idx}>
+          <p>From: {memo.name}</p>
+          <p>Message: {memo.message}</p>
+          <p>Time: {memo.timestamp.toString()}</p>
+        </div>
+      )}
+    ))}
+
+    <footer className={styles.footer}>
+      <a
+        href="https://twitter.com/0xkumi"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Created by @0xkumi
+      </a>
+    </footer>
     </>
   )
 }
