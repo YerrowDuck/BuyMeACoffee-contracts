@@ -225,7 +225,7 @@ export default function Home() {
 
       <Box as="footer" textAlign="center" p={4} bg="gray.200">
         <Text fontSize="sm" color="gray.600">
-          Created by @0xkumi
+          ©️ Created by YerrowDuck
         </Text>
       </Box>
     </ChakraProvider>
