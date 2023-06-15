@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Inter } from 'next/font/google';
 import React, { useEffect, useState } from "react";
 import styles from '@/styles/Home.module.css';
-import { ChakraProvider, Box, Text, Input, Textarea, Button, VStack, Center, Divider } from '@chakra-ui/react';
+import { ChakraProvider, Box, Text, Input, Textarea, Button, VStack, Center, Divider, Card, Avatar, Heading, HStack} from '@chakra-ui/react';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -19,6 +19,7 @@ export default function Home() {
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
   const [memos, setMemos] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const onNameChange = (event) => {
     setName(event.target.value);
@@ -29,11 +30,11 @@ export default function Home() {
   }
 
   // Wallet connection logic
-  const isWalletConnected = async () =>  {
+  const isWalletConnected = async () => {
     try {
       const { ethereum } = window;
 
-      const accounts = await ethereum.request({method: 'eth_accounts'});
+      const accounts = await ethereum.request({ method: 'eth_accounts' });
       console.log("accounts: ", accounts);
 
       if (accounts.length > 0) {
@@ -44,16 +45,17 @@ export default function Home() {
       }
     } catch (error) {
       console.log("error", error);
+      // setErrorMessage("エラーが発生しました");
     }
   }
 
   const connectWallet = async () => {
-
     try {
-      const {ethereum} = window;
+      const { ethereum } = window;
 
-      if(!ethereum) {
-        console.log("Please install MetaMask");
+      if (!ethereum) {
+        setErrorMessage("MetaMaskをインストールしてください");
+        return;
       }
 
       const accounts = await ethereum.request({
@@ -63,6 +65,7 @@ export default function Home() {
       setCurrentAccount(accounts[0]);
     } catch (error) {
       console.log(error);
+      // setErrorMessage("エラーが発生しました");
     }
   }
 
@@ -88,12 +91,13 @@ export default function Home() {
         console.log("mined", teaTxn.hash);
         console.log("tea purchased successfully");
 
-        //Clear the form fields
+        // Clear the form fields
         setName("");
         setMessage("");
       }
     } catch (error) {
       console.log(error);
+      // setErrorMessage("エラーが発生しました");
     }
   };
 
@@ -112,9 +116,11 @@ export default function Home() {
         setMemos(memos);
       } else {
         console.log("Metamask is not connected");
+        setErrorMessage("Metamaskが接続されていません");
       }
     } catch (error) {
       console.log(error);
+      // setErrorMessage("エラーが発生しました");
     }
   };
 
@@ -196,38 +202,50 @@ export default function Home() {
             </Button>
           </VStack>
         ) : (
-          <Button colorScheme="teal" onClick={connectWallet} mt={2}>
-            Connect your wallet
-          </Button>
+          <Box mt={5}>
+            <Button colorScheme="teal" onClick={connectWallet}>
+              Connect Wallet
+            </Button>
+          </Box>
+        )}
+
+        {errorMessage && (
+          <Box mt={5}>
+            <Text color="red.500" fontSize="lg">
+              {errorMessage}
+            </Text>
+          </Box>
+        )}
+
+    {currentAccount && (
+          <>
+            <Divider my={10} />
+
+            <Text fontSize="3xl" fontWeight="bold" mb={5}>
+              Memos
+            </Text>
+
+            <Card spacing={4} p={8} maxW='sm'>
+              {memos.map((memo, index) => (
+                <VStack alignItems="center" key={index}>
+                  <Avatar name='Dan Abrahmov' src='https://bit.ly/dan-abramov' />
+                  <Heading size='md' >{memo.name}</Heading>
+                  <Text>{memo.message}</Text>
+                  <Text color="gray.500" fontSize="sm">
+                    {memo.timestamp.toLocaleString()}
+                  </Text>
+                  <Divider my={3} />
+                </VStack>
+              ))}
+            </Card>
+          </>
         )}
       </Box>
-
-      {currentAccount && (
-        <Box as="section" p={4}>
-          <Text as="h1" fontSize="xl" fontWeight="bold" mb={4}>
-            Memos received
-          </Text>
-          {memos.map((memo, idx) => (
-            <Box key={idx} bg="gray.200" borderRadius="md" p={4} mb={4}>
-              <Text>
-                From: {memo.name}
-              </Text>
-              <Text>
-                Message: {memo.message}
-              </Text>
-              <Text>
-                Time: {memo.timestamp.toString()}
-              </Text>
-            </Box>
-          ))}
-        </Box>
-      )}
-
       <Box as="footer" textAlign="center" p={4} bg="gray.200">
         <Text fontSize="sm" color="gray.600">
           ©️ Created by YerrowDuck
         </Text>
       </Box>
     </ChakraProvider>
-  )
+  );
 }
