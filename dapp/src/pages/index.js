@@ -18,7 +18,22 @@ export default function Home() {
   const [currentAccount, setCurrentAccount] = useState("");
   const [name, setName] = useState("");
   const [message, setMessage] = useState("");
-  const [memos, setMemos] = useState("");
+  // Set initial memos with dummy data
+  const [memos, setMemos] = useState([
+    {
+      address: "0x123456789",
+      timestamp: new Date(),
+      name: "Jhon",
+      message: "Thanks for building this!"
+    },
+    {
+      address: "0x987654321",
+      timestamp: new Date(),
+      name: "Mark",
+      message: "Amazing builder!"
+    },
+  ]);
+
   const [errorMessage, setErrorMessage] = useState("");
 
   const onNameChange = (event) => {
@@ -217,29 +232,27 @@ export default function Home() {
           </Box>
         )}
 
-    {currentAccount && (
-          <>
-            <Divider my={10} />
+    <>
+        <Divider my={10} />
 
-            <Text fontSize="3xl" fontWeight="bold" mb={5}>
-              Memos
-            </Text>
+        <Text fontSize="3xl" fontWeight="bold" mb={5}>
+          Memos
+        </Text>
 
-            <Card spacing={4} p={8} maxW='sm'>
-              {memos.map((memo, index) => (
-                <VStack alignItems="center" key={index}>
-                  <Avatar name='Dan Abrahmov' src='https://bit.ly/dan-abramov' />
-                  <Heading size='md' >{memo.name}</Heading>
-                  <Text>{memo.message}</Text>
-                  <Text color="gray.500" fontSize="sm">
-                    {memo.timestamp.toLocaleString()}
-                  </Text>
-                  <Divider my={3} />
-                </VStack>
-              ))}
-            </Card>
-          </>
-        )}
+        <Card spacing={4} p={8} maxW='sm'>
+          {memos.map((memo, index) => (
+            <VStack alignItems="center" key={index}>
+              <Avatar name='Dan Abrahmov' src='https://bit.ly/dan-abramov' />
+              <Heading size='md' >{memo.name}</Heading>
+              <Text>{memo.message}</Text>
+              <Text color="gray.500" fontSize="sm">
+                {memo.timestamp.toLocaleString()}
+              </Text>
+              <Divider my={3} />
+            </VStack>
+          ))}
+        </Card>
+      </>
       </Box>
       <Box as="footer" textAlign="center" p={4} bg="gray.200">
         <Text fontSize="sm" color="gray.600">
