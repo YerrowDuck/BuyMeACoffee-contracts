@@ -273,7 +273,7 @@ export default function Home() {
           <Button colorScheme="teal" size="lg" fontWeight="bold" onClick={connectWallet}>
             <Flex align="center">
               <Text pr={2}>Connect your wallet</Text>
-              <FontAwesomeIcon icon={faChevronRight} />
+              <FontAwesomeIcon icon={faChevronRight} style={{ fontSize: '13px' }} />
             </Flex>
           </Button>
         )}
