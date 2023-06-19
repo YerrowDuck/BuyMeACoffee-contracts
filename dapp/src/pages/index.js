@@ -213,7 +213,8 @@ export default function Home() {
             </Button>
           </VStack>
         ) : (
-          <Button colorScheme="teal" size="lg" onClick={connectWallet}>
+
+          <Button colorScheme="teal" onClick={connectWallet}>
             Connect your wallet
           </Button>
         )}
