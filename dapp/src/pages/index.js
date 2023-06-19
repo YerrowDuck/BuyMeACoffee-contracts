@@ -27,19 +27,19 @@ export default function Home() {
     {
       name: '佐藤太郎',
       message: '素晴らしい記事をありがとうございました、感謝の印にお茶を送ります！',
-      timestamp: new Date(),
+      timestamp: "Mon Jun 19 2023 15:54:57 GMT+0900",
       avatar: 'https://dummyimage.com/100x100/2aebfa/fff'
     },
     {
       name: '鈴木花子',
       message: 'あなたのイラストにいつも元気をもらっています。お茶をおごりますね。',
-      timestamp: new Date(),
+      timestamp: "Mon Jun 19 2023 15:54:57 GMT+0900",
       avatar: 'https://dummyimage.com/100x100/3bdeda/fff'
     },
     {
       name: '高橋一郎',
       message: 'あなたのコードが大変参考になりました、感謝の印にお茶を送ります。',
-      timestamp: new Date(),
+      timestamp: "Mon Jun 19 2023 15:54:57 GMT+0900",
       avatar: 'https://dummyimage.com/100x100/6ccdd7/fff'
     },
   ];
@@ -278,8 +278,7 @@ export default function Home() {
           </Button>
         )}
 
-        {/* メモが存在するかどうかで表示を切り替える */}
-        {memos.length > 0 && (
+        {!currentAccount && (
           <Box as="section" p={9}>
             <Text as="h1" fontSize="2xl" fontWeight="bold" mb={4}>
               受け取ったメモ
