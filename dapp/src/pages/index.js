@@ -15,7 +15,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
   // Contract Address & ABI
-  const contractsAddress = "0xC2F13528B91582E64e18Ea3E0DCDfeFedBd9333F";
+  const contractsAddress = "0x419BB15597e86090b3467474AAd9016211530F72";
   const contractABI = abi.abi;
 
   // Component State
@@ -74,6 +74,13 @@ export default function Home() {
       }
     } catch (error) {
       console.log("error", error);
+      toast({
+        title: "エラー",
+        description: "MetaMaskがインストールされていません。",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   }
 
@@ -92,6 +99,13 @@ export default function Home() {
       setCurrentAccount(accounts[0]);
     } catch (error) {
       console.log(error);
+      toast({
+        title: "エラー",
+        description: "MetaMaskがインストールされていません。",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   }
 
@@ -113,8 +127,8 @@ export default function Home() {
         );
 
         toast({
-          title: "Tea purchase initiated.",
-          description: "Your transaction has been sent. Waiting for confirmation.",
+          title: "ブロックチェーン上にデータを送信中。少々お待ちください。",
+          // description: "ブロックチェーン上にデータを送信中。少々お待ちください。",
           status: "info",
           duration: 5000,
           isClosable: true,
@@ -123,8 +137,8 @@ export default function Home() {
         await teaTxn.wait();
 
         toast({
-          title: "Tea purchased successfully.",
-          description: `Transaction hash: ${teaTxn.hash}`,
+          title: "無事にクリエイターへお茶代が送られました.ありがとううう！",
+          // description: `Transaction hash: ${teaTxn.hash}`,
           status: "success",
           duration: 5000,
           isClosable: true,
@@ -132,14 +146,6 @@ export default function Home() {
 
         console.log("mined", teaTxn.hash);
         console.log("tea purchased successfully");
-
-        toast({
-          title: "Tea purchased successfully.",
-          description: `Your message: ${message}`,
-          status: "success",
-          duration: 9000,
-          isClosable: true,
-        });
 
         //Clear the form fields
         setName("");
@@ -278,7 +284,7 @@ export default function Home() {
           </Button>
         )}
 
-        {!currentAccount && (
+        {currentAccount && (
           <Box as="section" p={9}>
             <Text as="h1" fontSize="2xl" fontWeight="bold" mb={4}>
               受け取ったメモ
