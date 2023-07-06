@@ -1,6 +1,6 @@
-#BuyMeATea 
+# BuyMeATea 
 
-##Project setup
+## Project setup
 
 ```bash
 cd dapp
@@ -8,7 +8,7 @@ cd dapp
 npm install
 ```
 
-##Run the development server
+## Run the development server
 
 ```bash
 npm run dev
