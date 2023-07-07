@@ -29,5 +29,5 @@ npm install
 ```bash
 npm run dev
 ```
-ウェブブラウザを開き、http://localhost:3000、 BuyMeATeaアプリにアクセスします。
+ウェブブラウザを開き、http://localhost:3000 、 BuyMeATeaアプリにアクセスします。
 おめでとうございます！Tea on Web3 Next.jsアプリのローカル環境のセットアップが完了しました。これで、ローカルでアプリを操作できるようになります。
