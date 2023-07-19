@@ -111,6 +111,16 @@ export default function Home() {
 
   // Function for Buying Tea
   const buyTea = async () => {
+
+    //color update
+    var target = document.getElementById("animationTest");
+    if(target.className == null || target.className == ""){
+      target.className = "active";
+    } 
+    else{
+      target.className = "";
+    }
+
     try {
       const { ethereum } = window;
 
@@ -271,7 +281,7 @@ export default function Home() {
               variant="filled"
             />
 
-            <Button colorScheme="teal" onClick={buyTea}>
+            <Button id = "animationTest" colorScheme="teal" onClick={buyTea}>
               Send 1 Tea for 0.001 ETH
             </Button>
           </VStack>

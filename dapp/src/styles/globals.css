@@ -105,3 +105,12 @@ a {
     color-scheme: dark;
   }
 }
+
+/*when button click then animation start*/
+#animationTest{
+  color:green;
+}
+
+#animationTest.active{
+  color: blue;
+}
